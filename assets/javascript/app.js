@@ -1,7 +1,7 @@
 var app = {
     $btnContainer: $("#btn-container"),
     $gifContainer: $("#gif-container"),
-    topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "music production", "live performance"],
+    topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
 
     selectedTopic: "",
     $selectedTopic: ""
@@ -55,9 +55,9 @@ $(document).ready(function() {
                 var newDiv = $("<div>").addClass("result");
 
                 // set it to static
-                var img = $("<img>").attr("src", data[i].images.fixed_height_still.url);
+                var img = $("<img>").attr("src", data[i].images.original_still.url);
                 // save static url
-                img.attr("data-static", data[i].images.fixed_height_still.url);
+                img.attr("data-static", data[i].images.original_still.url);
                 // save animated url
                 img.attr("data-animated", data[i].images.original.url);
                 // save its current state
@@ -81,10 +81,23 @@ $(document).ready(function() {
     }) // end of button click event
 
     $(document).on("click", "img", function (event) {
-        // if static, make animated
-        // if animated, make static
-        // change state
-    })
+        var dataState = $(this).attr("data-state");
+        var dataStatic = $(this).attr("data-static");
+        var dataAnimated = $(this).attr("data-animated");
+        
+        if (dataState === "static") {
+            // if static, make animated
+            $(this).attr("src", dataAnimated);
+            // update state
+            $(this).attr("data-state", "animated");
+        } else {
+            // if animated, make static
+            $(this).attr("src", dataStatic);
+            // update state
+            $(this).attr("data-state", "static");
+        }
+        
+    }) // end of img click event
 
 
 

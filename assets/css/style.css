@@ -16,6 +16,9 @@ button:hover, .selected {
     background: deepskyblue;
 }
 
+img {
+    max-width: 300px;
+}
 
 
 #gif-container > p {
