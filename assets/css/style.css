@@ -1,0 +1,17 @@
+button {
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    background: darkslateblue;
+    color: white;
+    margin: 5px;
+    transition: background 0.1s;
+}
+
+button:focus {
+    outline: none;
+}
+
+button:hover, .selected {
+    background: deepskyblue;
+}
