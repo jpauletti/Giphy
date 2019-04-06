@@ -15,3 +15,14 @@ button:focus {
 button:hover, .selected {
     background: deepskyblue;
 }
+
+
+
+#gif-container > p {
+    display: inline-block;
+}
+
+.result {
+    display: inline-block;
+    margin: 10px;
+}
