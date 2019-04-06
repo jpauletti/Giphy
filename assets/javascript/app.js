@@ -1,56 +1,46 @@
 var app = {
     $btnContainer: $("#btn-container"),
     $gifContainer: $("#gif-container"),
+    $input: $("#add-category"),
+    $submitBtn: $("#submit"),
     topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
 
     selectedTopic: "",
-    $selectedTopic: ""
-}
+    $selectedTopic: "",
 
+    generateBtns: function () {
+        // first clear out current btns if any
+        app.$btnContainer.empty();
 
-$(document).ready(function() {
-    $.each(app.topics, function(index, value) {
-        // make new button
-        var newBtn = $("<button>").text(value);
-        // add it to page
-        app.$btnContainer.append(newBtn);
+        $.each(app.topics, function (index, value) {
+            // make new button
+            var newBtn = $("<button>").text(value);
+            // add class
+            newBtn.addClass("categories");
+            // add it to page
+            app.$btnContainer.append(newBtn);
 
-    })
+        })
+    },
 
-
-    // click event for buttons
-    $(document).on("click", "button", function (event) {
-        $(this).addClass("selected");
-
-        // remove selected class from previous selection
-        if (app.$selectedTopic !== "") {
-            app.$selectedTopic.removeClass("selected");
-        }
-
-        // update saved selected item
-        app.$selectedTopic = $(this);
-        // save selected topic for api use
-        app.selectedTopic = $(this).text();
-        console.log(app.selectedTopic);
-
-
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+    getGifs: function () {
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
         console.log(queryURL);
 
         // api
         $.ajax({
             url: queryURL,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             // empty gif container
             app.$gifContainer.empty();
 
             var data = response.data;
 
-        
+
 
             // display each gif
-            $.each(data, function(i, value){
+            $.each(data, function (i, value) {
                 // create div for each gif
                 var newDiv = $("<div>").addClass("result");
 
@@ -76,6 +66,31 @@ $(document).ready(function() {
             })
 
         });
+    }
+}
+
+
+$(document).ready(function() {
+    // generate btns
+    app.generateBtns();
+
+
+    // click event for buttons
+    $(document).on("click", ".categories", function (event) {
+        $(this).addClass("selected");
+
+        // remove selected class from previous selection
+        if (app.$selectedTopic !== "") {
+            app.$selectedTopic.removeClass("selected");
+        }
+
+        // update saved selected item
+        app.$selectedTopic = $(this);
+        // save selected topic for api use
+        app.selectedTopic = $(this).text();
+        console.log(app.selectedTopic);
+
+        app.getGifs();
  
 
     }) // end of button click event
@@ -98,6 +113,23 @@ $(document).ready(function() {
         }
         
     }) // end of img click event
+
+
+    app.$submitBtn.on("click", function(event) {
+        event.preventDefault();
+
+        // add value to array
+        var newCategory = app.$input.val();
+        app.topics.push(newCategory);
+
+        // clear input
+        app.$input.val("");
+        
+        // re-generate btns
+        app.generateBtns();
+
+
+    }) // end of submit btn click event
 
 
 
