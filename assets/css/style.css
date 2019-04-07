@@ -17,7 +17,12 @@ button:hover, .selected {
 }
 
 img {
-    max-width: 210px;
+    /* max-width: 210px; */
+    max-height: 160px;
+}
+
+input {
+    margin-top: .375rem;
 }
 
 
@@ -28,4 +33,10 @@ img {
 .result {
     display: inline-block;
     margin: 10px;
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 1200px;
+    }
 }

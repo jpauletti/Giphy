@@ -12,18 +12,31 @@
     <body>
 
         <div class="container">
-            <div class="row">
+            <div class="row text-center">
                 <div class="col-md-12" id="btn-container">
                     <!-- buttons will go here -->
                 </div>
             </div>
 
+            <div class="row justify-content-center mt-3">
+                <div class="col-lg-6 col-md-12">
+                    <form class="form-inline justify-content-center">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="add-category" class="sr-only">Add Category</label>
+                            <input type="text" class="form-control" id="add-category" placeholder="add a category">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">submit</button>
+                    </form>
+
+                </div>
+            </div>
+
             <div class="row mt-4">
-                <div class="col-md-9" id="gif-container">
+                <div class="col-md-12" id="gif-container">
                     <!-- results here -->
                 </div>
 
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <form>
                         <div class="form-group">
                             <label for="add-category">Add a category</label>
@@ -33,7 +46,7 @@
                         
                         <button type="submit" class="btn btn-primary" id="submit">Submit</button>
                     </form>
-                </div>
+                </div> -->
             </div>
 
         </div> <!-- end container -->

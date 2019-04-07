@@ -1,6 +1,7 @@
 var app = {
     $btnContainer: $("#btn-container"),
     $gifContainer: $("#gif-container"),
+    $form: $(".form-inline"),
     $input: $("#add-category"),
     $submitBtn: $("#submit"),
     topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
@@ -115,7 +116,7 @@ $(document).ready(function() {
     }) // end of img click event
 
 
-    app.$submitBtn.on("click", function(event) {
+    app.$form.on("submit", function(event) {
         event.preventDefault();
 
         // add value to array
@@ -124,7 +125,7 @@ $(document).ready(function() {
 
         // clear input
         app.$input.val("");
-        
+
         // re-generate btns
         app.generateBtns();
 
