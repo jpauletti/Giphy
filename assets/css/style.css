@@ -25,6 +25,10 @@ input {
     margin-top: .375rem;
 }
 
+.hide {
+    display: none;
+}
+
 
 #gif-container > p {
     display: inline-block;

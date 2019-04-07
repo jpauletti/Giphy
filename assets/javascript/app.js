@@ -4,6 +4,9 @@ var app = {
     $form: $(".form-inline"),
     $input: $("#add-category"),
     $submitBtn: $("#submit"),
+    $viewMoreBtn: $("#view-more-btn"),
+    $viewMoreSection: $(".view-more-section"),
+    gifNumPosition: 0,
     topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
 
     selectedTopic: "",
@@ -38,7 +41,6 @@ var app = {
             var data = response.data;
 
 
-
             // display each gif
             $.each(data, function (i, value) {
                 // create div for each gif
@@ -65,7 +67,14 @@ var app = {
 
             })
 
+            // display "view more" button
+            app.$viewMoreSection.removeClass("hide");
+
+
         });
+
+        // set position for how many gifs have been loaded
+        app.gifNumPosition = 10;
     }
 }
 
@@ -132,6 +141,54 @@ $(document).ready(function() {
 
     }) // end of submit btn click event
 
+
+
+    app.$viewMoreBtn.on("click", function(event) {
+        event.preventDefault();
+
+        // new query URL with offset
+        var queryURLagain = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&offset=" + app.gifNumPosition + "&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+
+        // api call again
+        $.ajax({
+            url: queryURLagain,
+            method: "GET"
+        }).then(function (response) {
+            var data = response.data;
+
+
+            // display each gif
+            $.each(data, function (i, value) {
+                // create div for each gif
+                var newDiv = $("<div>").addClass("result");
+
+                // set it to static
+                var img = $("<img>").attr("src", data[i].images.original_still.url);
+                // save static url
+                img.attr("data-static", data[i].images.original_still.url);
+                // save animated url
+                img.attr("data-animated", data[i].images.original.url);
+                // save its current state
+                img.attr("data-state", "static");
+
+                // add image to div
+                newDiv.append(img);
+
+                // add rating to div
+                var rating = $("<p>").text("Rating: " + data[i].rating);
+                newDiv.append(rating);
+
+                // add image and rating to div on page
+                app.$gifContainer.append(newDiv);
+
+            })
+
+            // set position for how many gifs have been loaded
+            app.gifNumPosition += 10;
+
+
+        });
+    })
 
 
 
