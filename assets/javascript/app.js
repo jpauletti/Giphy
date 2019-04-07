@@ -26,7 +26,6 @@ var app = {
 
     getGifs: function () {
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
-        console.log(queryURL);
 
         // api
         $.ajax({
@@ -120,8 +119,9 @@ $(document).ready(function() {
         event.preventDefault();
 
         // add value to array
-        var newCategory = app.$input.val();
+        var newCategory = app.$input.val().trim();
         app.topics.push(newCategory);
+        console.log(newCategory);
 
         // clear input
         app.$input.val("");
