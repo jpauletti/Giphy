@@ -9,6 +9,8 @@ var app = {
     $viewMoreSection: $(".view-more-section"),
     $favsSection: $(".favorites-section"),
     $favsContainer: $("#favorites-container"),
+
+    favsArray: [],
     gifNumPosition: 0,
     topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
 
@@ -86,7 +88,22 @@ var app = {
                 // save its current state
                 img.attr("data-state", "static");
 
-                var favIcon = $("<i>").addClass("far fa-heart fav-icon opacity-0");
+                var isAfav = false;
+                $.each(app.favsArray, function(i, value) {
+                    // data-static value in favs array
+                    var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
+                    // if this image's static url matches one in the favs array
+                    if (staticElement === img.attr("data-static")) {
+                        isAfav = true;
+                    }
+                });
+
+                // if in favs array, show filled in heart
+                if (isAfav) {
+                    var favIcon = $("<i>").addClass("fas fa-heart fav-icon opacity-0");
+                } else {
+                    var favIcon = $("<i>").addClass("far fa-heart fav-icon opacity-0");
+                }
 
                 // add image to div
                 newDiv.append(favIcon, img);
@@ -258,9 +275,19 @@ $(document).ready(function() {
 
     // click fav icon - add to favorites
     $(document).on("click", ".fav-icon", function() {
-        // fill in heart
-        $(this).removeClass("far");
-        $(this).addClass("fas");
+        // fill in heart or vice versa
+        $(this).toggleClass("far");
+        $(this).toggleClass("fas");
+        
+
+        // if (favsArray.indexOf($(this)) > -1) {
+        //     // remove from favorites
+        // }
+
+        // add to favorites array
+        var newItem = $(this).parent().children("img");
+        app.favsArray.push(newItem);
+        console.log(app.favsArray);
 
         // copy results div to favorites section ,which is hidden
         var copy = $(this).parent().clone();
