@@ -37,6 +37,19 @@ input {
 .result {
     display: inline-block;
     margin: 10px;
+    position: relative;
+}
+
+.fav-icon {
+    position: absolute;
+    color: white;
+    top: 10px;
+    right: 10px; 
+    cursor: pointer;
+}
+
+.opacity-0 {
+    opacity: 0;
 }
 
 @media (min-width: 992px) {
