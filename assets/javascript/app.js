@@ -11,6 +11,7 @@ var app = {
 
     selectedTopic: "",
     $selectedTopic: "",
+    queryURL: "",
 
     generateBtns: function () {
         // first clear out current btns if any
@@ -27,19 +28,42 @@ var app = {
         })
     },
 
-    getGifs: function () {
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+    displayGifs: function () {
+        // display each gif
+        $.each(data, function (i, value) {
+            // create div for each gif
+            var newDiv = $("<div>").addClass("result");
 
+            // set it to static
+            var img = $("<img>").attr("src", data[i].images.original_still.url);
+            // save static url
+            img.attr("data-static", data[i].images.original_still.url);
+            // save animated url
+            img.attr("data-animated", data[i].images.original.url);
+            // save its current state
+            img.attr("data-state", "static");
+
+            // add image to div
+            newDiv.append(img);
+
+            // add rating to div
+            var rating = $("<p>").text("Rating: " + data[i].rating);
+            newDiv.append(rating);
+
+            // add image and rating to div on page
+            app.$gifContainer.append(newDiv);
+
+        })
+    },
+
+    getGifsFromGiphy: function () {
         // api
         $.ajax({
-            url: queryURL,
+            url: app.queryURL,
             method: "GET"
         }).then(function (response) {
-            // empty gif container
-            app.$gifContainer.empty();
 
             var data = response.data;
-
 
             // display each gif
             $.each(data, function (i, value) {
@@ -67,16 +91,13 @@ var app = {
 
             })
 
-            // display "view more" button
-            app.$viewMoreSection.removeClass("hide");
-
-
         });
 
-        // set position for how many gifs have been loaded
-        app.gifNumPosition = 10;
     }
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 $(document).ready(function() {
@@ -99,10 +120,24 @@ $(document).ready(function() {
         app.selectedTopic = $(this).text();
         console.log(app.selectedTopic);
 
-        app.getGifs();
+        app.queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+        
+        // empty gif container
+        app.$gifContainer.empty();
+
+        app.getGifsFromGiphy();
+
+        // display "view more" button
+        app.$viewMoreSection.removeClass("hide");
+
+        // set position for how many gifs have been loaded
+        app.gifNumPosition = 10;
  
 
     }) // end of button click event
+
+
+
 
     $(document).on("click", "img", function (event) {
         var dataState = $(this).attr("data-state");
@@ -124,6 +159,9 @@ $(document).ready(function() {
     }) // end of img click event
 
 
+
+
+
     app.$form.on("submit", function(event) {
         event.preventDefault();
 
@@ -143,51 +181,19 @@ $(document).ready(function() {
 
 
 
+
+
+
     app.$viewMoreBtn.on("click", function(event) {
         event.preventDefault();
 
         // new query URL with offset
-        var queryURLagain = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&offset=" + app.gifNumPosition + "&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+        app.queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&offset=" + app.gifNumPosition + "&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
 
-        // api call again
-        $.ajax({
-            url: queryURLagain,
-            method: "GET"
-        }).then(function (response) {
-            var data = response.data;
+        app.getGifsFromGiphy();
 
-
-            // display each gif
-            $.each(data, function (i, value) {
-                // create div for each gif
-                var newDiv = $("<div>").addClass("result");
-
-                // set it to static
-                var img = $("<img>").attr("src", data[i].images.original_still.url);
-                // save static url
-                img.attr("data-static", data[i].images.original_still.url);
-                // save animated url
-                img.attr("data-animated", data[i].images.original.url);
-                // save its current state
-                img.attr("data-state", "static");
-
-                // add image to div
-                newDiv.append(img);
-
-                // add rating to div
-                var rating = $("<p>").text("Rating: " + data[i].rating);
-                newDiv.append(rating);
-
-                // add image and rating to div on page
-                app.$gifContainer.append(newDiv);
-
-            })
-
-            // set position for how many gifs have been loaded
-            app.gifNumPosition += 10;
-
-
-        });
+        // set position for how many gifs have been loaded
+        app.gifNumPosition += 10;
     })
 
 
