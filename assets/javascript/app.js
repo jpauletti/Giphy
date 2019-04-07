@@ -33,6 +33,8 @@ var app = {
         })
 
         var newFavBtn = $("<button>").text("favorites");
+        var newFavIcon = $("<i>").addClass("fas fa-heart favBtn");
+        newFavBtn.prepend(newFavIcon);
         newFavBtn.addClass("favorites");
         app.$btnContainer.append(newFavBtn);
     },
