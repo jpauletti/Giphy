@@ -88,7 +88,7 @@ var app = {
                 // save its current state
                 img.attr("data-state", "static");
 
-                var isAfav = false;
+                var isAfav = false; // is this image favorited?
                 $.each(app.favsArray, function(i, value) {
                     // data-static value in favs array
                     var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
@@ -266,7 +266,6 @@ $(document).ready(function() {
 
     // hover on images - show fav icon
     $(document).on("mouseenter mouseleave", ".result", function(){
-        console.log("test hover");
         // toggle heart icon
         var icon = $(this).children(".fav-icon");
         icon.toggleClass("opacity-0");
@@ -278,20 +277,52 @@ $(document).ready(function() {
         // fill in heart or vice versa
         $(this).toggleClass("far");
         $(this).toggleClass("fas");
-        
 
-        // if (favsArray.indexOf($(this)) > -1) {
-        //     // remove from favorites
-        // }
+        var theImage = $(this).parent().children("img");
+        // var indexOfMain = app.favsArray.indexOf(theImage);
+        // console.log(indexOfMain);
+        // console.log(theImage);
+        // console.log(app.favsArray[0]);
+        // console.log(theImage === app.favsArray[0]);
 
-        // add to favorites array
-        var newItem = $(this).parent().children("img");
-        app.favsArray.push(newItem);
-        console.log(app.favsArray);
 
-        // copy results div to favorites section ,which is hidden
-        var copy = $(this).parent().clone();
-        copy.appendTo(app.$favsContainer);
+        var isInFavsAlready = false;
+        $.each(app.favsArray, function(i, value) {
+            console.log("favsArray: ", app.favsArray);
+            console.log(i);
+            console.log(app.favsArray[i]);
+            console.log(app.favsArray[i][0]);
+            console.log("static url: " + app.favsArray[i][0].attributes[1].nodeValue);
+            var favStatic = app.favsArray[i][0].attributes[1].nodeValue;
+            if (favStatic === theImage.attr("data-static")) {
+                console.log("already in array");
+                //remove from favs array
+                app.favsArray.splice(i, 1);
+                isInFavsAlready = true;
+
+                // remove div from favorites section
+                var favoriteSelector = '#favorites-container .result > img[data-static="' + theImage.attr("data-static") + '"';
+                $(favoriteSelector).parent().remove();
+
+                console.log("favsArray now: ", app.favsArray);
+                return false;
+            }
+        });
+
+        // if not already favorited, add to array and favs section
+        if (isInFavsAlready === false) {
+            // add to favorites array
+            var newItem = $(this).parent().children("img");
+            app.favsArray.push(newItem);
+            console.log(app.favsArray);
+
+            // copy results div to favorites section ,which is hidden
+            var copy = $(this).parent().clone();
+            copy.appendTo(app.$favsContainer);
+            // start fav icon at opacity 0
+            $("#favorites-container > .result > i").addClass("opacity-0");
+        }
+
     })
 
 
