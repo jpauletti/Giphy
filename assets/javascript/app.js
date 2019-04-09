@@ -12,7 +12,7 @@ var app = {
 
     favsArray: [],
     gifNumPosition: 0,
-    topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "singing", "live performance"],
+    topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "drums", "singing", "live performance"],
 
     selectedTopic: "",
     $selectedTopic: "",
