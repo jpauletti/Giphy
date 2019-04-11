@@ -94,9 +94,14 @@ var app = {
                 var isAfav = false; // is this image favorited?
                 $.each(app.favsArray, function(i, value) {
                     // data-static value in favs array
-                    var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
+                    var getStatic1 = app.favsArray[0].split("data-static="); // trim begginning
+                    var getStatic2 = getStatic1[1].split('"'); // trim all quotes
+                    var getStatic = getStatic2[1]; // second trimmed section = static url
+                    // var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
+                    console.log(getStatic);
+
                     // if this image's static url matches one in the favs array
-                    if (staticElement === img.attr("data-static")) {
+                    if (getStatic === img.attr("data-static")) {
                         isAfav = true;
                     }
                 });
@@ -279,18 +284,27 @@ $(document).ready(function() {
         var theImage = $(this).parent().children("img");
 
         var isInFavsAlready = false;
+
         $.each(app.favsArray, function(i, value) {
             console.log("favsArray: ", app.favsArray);
-            console.log(i);
             console.log(app.favsArray[i]);
-            console.log(app.favsArray[i][0]);
-            console.log("static url: " + app.favsArray[i][0].attributes[1].nodeValue);
-            var favStatic = app.favsArray[i][0].attributes[1].nodeValue;
-            if (favStatic === theImage.attr("data-static")) {
+
+            var getStatic1 = app.favsArray[i].split("data-static="); // trim begginning
+            var getStatic2 = getStatic1[1].split('"'); // trim all quotes
+            var getStatic = getStatic2[1]; // second trimmed section = static url
+            console.log("=====================");
+            console.log(i);
+            console.log(getStatic);
+            console.log(theImage.attr("data-static"));
+
+            if (getStatic === theImage.attr("data-static")) {
                 console.log("already in array");
                 //remove from favs array
                 app.favsArray.splice(i, 1);
                 isInFavsAlready = true;
+
+                // remove from storage by updating it
+                localStorage.setItem("favorites", JSON.stringify(app.favsArray));
 
                 // remove div from favorites section
                 var favoriteSelector = '#favorites-container .result > img[data-static="' + theImage.attr("data-static") + '"';
@@ -304,7 +318,9 @@ $(document).ready(function() {
         // if not already favorited, add to array and favs section
         if (isInFavsAlready === false) {
             // add to favorites array
-            var newItem = $(this).parent().children("img");
+            // var newItem = $(this).parent().children("img");
+            console.log($(this).parent().children("img")[0].outerHTML);
+            var newItem = $(this).parent().children("img")[0].outerHTML;
             app.favsArray.push(newItem);
             console.log(app.favsArray);
 
@@ -312,6 +328,7 @@ $(document).ready(function() {
             var copy = $(this).parent().clone();
             copy.appendTo(app.$favsContainer);
 
+            // save to local storage by updating array saved
             localStorage.setItem("favorites", JSON.stringify(app.favsArray));
             // start fav icon at opacity 0
             $("#favorites-container > .result > i").addClass("opacity-0");
@@ -325,30 +342,25 @@ $(document).ready(function() {
 
 
     // on page load - load saved favorites
+    app.favsArray = JSON.parse(localStorage.getItem("favorites"));
+
+    if (app.favsArray !== null) {
+        for (var i = 0; i < app.favsArray.length; i++) {
+            var theImage = app.favsArray[i];
+
+            // create parent div and fav icon
+            var mainDiv = $("<div>").addClass("result");
+            var icon = $("<i>").addClass("fa-heart fav-icon fas opacity-0");
+            // add image and icon to parent div
+            mainDiv.append(icon, theImage);
+            // add parent div to favorites container
+            app.$favsContainer.append(mainDiv);
+
+        }
+    } else {
+        app.favsArray = [];
+    }
     
-    // fill in heart or vice versa
-    // $(this).addClass("fas");
-
-    // app.favsArray = JSON.parse(localStorage.getItem("favorites"));
-
-    // for (var i = 0; i < app.favsArray.length; i++) {
-    //     var theImage = app.favsArray[i];
-
-    //     var mainDiv = $("<div>").addClass("result");
-    //     var icon = $("<i>").addClass(fa-heart fav-icon fas opacity-0);
-
-    //     mainDiv.append(icon, theImage);
-
-    //     app.$favsContainer.append(mainDiv);
-
-    //     // copy results div to favorites section ,which is hidden
-    //     var copy = $(this).parent().clone();
-    //     copy.appendTo(app.$favsContainer);
-
-    //     <div class="result"><i class="fa-heart fav-icon fas opacity-0"></i>
-
-
-    // }
 
 
 
