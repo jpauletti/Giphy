@@ -76,6 +76,7 @@ var app = {
         }).then(function (response) {
 
             var data = response.data;
+            console.log(data);
 
             // display each gif
             $.each(data, function (i, value) {
@@ -94,11 +95,12 @@ var app = {
                 var isAfav = false; // is this image favorited?
                 $.each(app.favsArray, function(i, value) {
                     // data-static value in favs array
-                    var getStatic1 = app.favsArray[0].split("data-static="); // trim begginning
+                    var getStatic1 = app.favsArray[i].split("data-static="); // trim begginning
                     var getStatic2 = getStatic1[1].split('"'); // trim all quotes
                     var getStatic = getStatic2[1]; // second trimmed section = static url
                     // var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
                     console.log(getStatic);
+                    console.log(img.attr("data-static"));
 
                     // if this image's static url matches one in the favs array
                     if (getStatic === img.attr("data-static")) {
@@ -123,10 +125,33 @@ var app = {
                 // add image and rating to div on page
                 app.$gifContainer.append(newDiv);
 
+                console.log(isAfav);
+                console.log(value);
             })
 
         });
 
+    },
+
+    clickCategory: function () {
+        // show gif container
+        app.$gifSection.removeClass("hide");
+
+        // hide favorites section
+        app.$favsSection.addClass("hide");
+
+        app.queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
+
+        // empty gif container
+        app.$gifContainer.empty();
+
+        app.getGifsFromGiphy();
+
+        // display "view more" button
+        app.$viewMoreSection.removeClass("hide");
+
+        // set position for how many gifs have been loaded
+        app.gifNumPosition = 10;
     }
 }
 
@@ -154,24 +179,9 @@ $(document).ready(function() {
         app.selectedTopic = $(this).text();
         console.log(app.selectedTopic);
 
-        // show gif container
-        app.$gifSection.removeClass("hide");
+        app.clickCategory();
 
-        // hide favorites section
-        app.$favsSection.addClass("hide");
-
-        app.queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
         
-        // empty gif container
-        app.$gifContainer.empty();
-
-        app.getGifsFromGiphy();
-
-        // display "view more" button
-        app.$viewMoreSection.removeClass("hide");
-
-        // set position for how many gifs have been loaded
-        app.gifNumPosition = 10;
  
 
     }) // end of button click event
