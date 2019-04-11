@@ -12,7 +12,8 @@ var app = {
 
     favsArray: [],
     gifNumPosition: 0,
-    topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "drums", "singing", "live performance"],
+    // topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "drums", "singing", "live performance"],
+    topics: ["ariana grande", "billie eilish", "camila cabello", "demi lovato", "ed sheeran", "one direction", "taylor swift"],
 
     selectedTopic: "",
     $selectedTopic: "",
@@ -184,11 +185,6 @@ $(document).ready(function() {
 
         // update saved selected item
         app.$selectedTopic = $(this);
-        // // save selected topic for api use
-        // app.selectedTopic = $(this).text();
-        // console.log(app.selectedTopic);
-
-        // app.queryURL = "https://api.giphy.com/v1/gifs/search?q=" + app.selectedTopic + "&limit=10&rating=pg&api_key=wmZbNV9tWBsVSS7H3gucE8MjqoeEUrkj";
 
         // hide gif container
         app.$gifSection.addClass("hide");
@@ -281,12 +277,6 @@ $(document).ready(function() {
         $(this).toggleClass("fas");
 
         var theImage = $(this).parent().children("img");
-        // var indexOfMain = app.favsArray.indexOf(theImage);
-        // console.log(indexOfMain);
-        // console.log(theImage);
-        // console.log(app.favsArray[0]);
-        // console.log(theImage === app.favsArray[0]);
-
 
         var isInFavsAlready = false;
         $.each(app.favsArray, function(i, value) {
@@ -321,11 +311,44 @@ $(document).ready(function() {
             // copy results div to favorites section ,which is hidden
             var copy = $(this).parent().clone();
             copy.appendTo(app.$favsContainer);
+
+            localStorage.setItem("favorites", JSON.stringify(app.favsArray));
             // start fav icon at opacity 0
             $("#favorites-container > .result > i").addClass("opacity-0");
         }
 
     })
+
+
+
+
+
+
+    // on page load - load saved favorites
+    
+    // fill in heart or vice versa
+    // $(this).addClass("fas");
+
+    // app.favsArray = JSON.parse(localStorage.getItem("favorites"));
+
+    // for (var i = 0; i < app.favsArray.length; i++) {
+    //     var theImage = app.favsArray[i];
+
+    //     var mainDiv = $("<div>").addClass("result");
+    //     var icon = $("<i>").addClass(fa-heart fav-icon fas opacity-0);
+
+    //     mainDiv.append(icon, theImage);
+
+    //     app.$favsContainer.append(mainDiv);
+
+    //     // copy results div to favorites section ,which is hidden
+    //     var copy = $(this).parent().clone();
+    //     copy.appendTo(app.$favsContainer);
+
+    //     <div class="result"><i class="fa-heart fav-icon fas opacity-0"></i>
+
+
+    // }
 
 
 
