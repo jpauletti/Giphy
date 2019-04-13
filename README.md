@@ -1,5 +1,7 @@
 # Giphy
 
-### Explore gifs from giphy in different categories, and even add your own.
+### Explore gifs from giphy in different categories, and even add your own categories.
 
-![Game Screenshot](assets/images/giphy-screenshot.jpg)
+Save your favorites to look at later.
+
+![Game Screenshot](assets/images/giphy-screenshot.png)
