@@ -12,8 +12,8 @@ var app = {
 
     favsArray: [],
     gifNumPosition: 0,
-    // topics: ["music", "guitar", "bass guitar", "banjo", "ukulele", "piano", "drums", "singing", "live performance"],
-    topics: ["ariana grande", "billie eilish", "camila cabello", "demi lovato", "ed sheeran", "one direction", "taylor swift"],
+    // topics: ["ariana grande", "billie eilish", "camila cabello", "ed sheeran", "maren morris", "one direction", "taylor swift"],
+    topics: ["happy", "sad", "angry", "tired", "done", "awkward", "bored", "mind blown"],
 
     selectedTopic: "",
     $selectedTopic: "",
@@ -76,7 +76,6 @@ var app = {
         }).then(function (response) {
 
             var data = response.data;
-            console.log(data);
 
             // display each gif
             $.each(data, function (i, value) {
@@ -98,9 +97,6 @@ var app = {
                     var getStatic1 = app.favsArray[i].image.split("data-static="); // trim begginning
                     var getStatic2 = getStatic1[1].split('"'); // trim all quotes
                     var getStatic = getStatic2[1]; // second trimmed section = static url
-                    // var staticElement = app.favsArray[i][0].attributes[1].nodeValue;
-                    console.log(getStatic);
-                    console.log(img.attr("data-static"));
 
                     // if this image's static url matches one in the favs array
                     if (getStatic === img.attr("data-static")) {
@@ -125,8 +121,6 @@ var app = {
                 // add image and rating to div on page
                 app.$gifContainer.append(newDiv);
 
-                console.log(isAfav);
-                console.log(value);
             })
 
         });
@@ -208,7 +202,6 @@ $(document).ready(function() {
         app.$selectedTopic = $(this);
         // save selected topic for api use
         app.selectedTopic = $(this).text();
-        console.log(app.selectedTopic);
 
         app.clickCategory();
 
@@ -338,7 +331,6 @@ $(document).ready(function() {
             var getStatic = getStatic2[1]; // second trimmed section = static url
 
             if (getStatic === theImage.attr("data-static")) {
-                console.log("already in array");
                 //remove from favs array
                 app.favsArray.splice(i, 1);
                 isInFavsAlready = true;
@@ -346,9 +338,10 @@ $(document).ready(function() {
                 // remove from storage by updating it
                 localStorage.setItem("favorites", JSON.stringify(app.favsArray));
 
-                theImage.parent().remove();
+                // remove from favorites part of page
+                var favoriteSelector = '#favorites-container img[data-static="' + theImage.attr("data-static") + '"';
+                $(favoriteSelector).parent().remove();
 
-                console.log("favsArray now: ", app.favsArray);
                 return false;
             }
         });
@@ -356,14 +349,11 @@ $(document).ready(function() {
         // if not already favorited, add to array and favs section
         if (!isInFavsAlready) {
             // add to favorites array
-            // var newItem = $(this).parent().children("img");
-            console.log($(this).parent().children("img")[0].outerHTML);
             var newItem = {
                 image: $(this).parent().children("img")[0].outerHTML,
                 rating: $(this).parent().children("p").text()
             }
             app.favsArray.push(newItem);
-            console.log(app.favsArray);
 
             // copy results div to favorites section, which is hidden
             var copy = $(this).parent().clone();
