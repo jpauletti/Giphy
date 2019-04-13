@@ -250,7 +250,7 @@ $(document).ready(function() {
 
 
 
-
+    // click event for gifs - to animate
     $(document).on("click", "img", function (event) {
         var dataState = $(this).attr("data-state");
         var dataStatic = $(this).attr("data-static");
@@ -273,7 +273,7 @@ $(document).ready(function() {
 
 
 
-
+    // hit submit - add category
     app.$form.on("submit", function(event) {
         event.preventDefault();
 
@@ -295,7 +295,7 @@ $(document).ready(function() {
 
 
 
-
+    // view more btn click event
     app.$viewMoreBtn.on("click", function(event) {
         event.preventDefault();
 
@@ -346,9 +346,7 @@ $(document).ready(function() {
                 // remove from storage by updating it
                 localStorage.setItem("favorites", JSON.stringify(app.favsArray));
 
-                // remove div from favorites section
-                var favoriteSelector = '#favorites-container .result > img[data-static="' + theImage.attr("data-static") + '"';
-                $(favoriteSelector).parent().remove();
+                theImage.parent().remove();
 
                 console.log("favsArray now: ", app.favsArray);
                 return false;

@@ -74,4 +74,8 @@ input {
     #gif-container {
         text-align: center;
     }
+
+    .categories, .favorites {
+        padding: 5px 10px;
+    }
 }
