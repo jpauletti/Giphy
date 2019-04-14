@@ -155,9 +155,10 @@ var app = {
 
     loadFavorites: function () {
         // on page load - load saved favorites
-        app.favsArray = JSON.parse(localStorage.getItem("favorites"));
 
         if (app.favsArray !== null) {
+            app.favsArray = JSON.parse(localStorage.getItem("favorites"));
+            
             for (var i = 0; i < app.favsArray.length; i++) {
                 var theImage = app.favsArray[i].image;
                 var theRating = app.favsArray[i].rating;
