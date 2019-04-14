@@ -91,26 +91,24 @@ var app = {
                 // save its current state
                 img.attr("data-state", "static");
 
-                if (app.favsArray.length > 0) {
-                    var isAfav = false; // is this image favorited?
-                    $.each(app.favsArray, function (i, value) {
-                        // data-static value in favs array
-                        var getStatic1 = app.favsArray[i].image.split("data-static="); // trim begginning
-                        var getStatic2 = getStatic1[1].split('"'); // trim all quotes
-                        var getStatic = getStatic2[1]; // second trimmed section = static url
+                var isAfav = false; // is this image favorited?
+                $.each(app.favsArray, function (i, value) {
+                    // data-static value in favs array
+                    var getStatic1 = app.favsArray[i].image.split("data-static="); // trim begginning
+                    var getStatic2 = getStatic1[1].split('"'); // trim all quotes
+                    var getStatic = getStatic2[1]; // second trimmed section = static url
 
-                        // if this image's static url matches one in the favs array
-                        if (getStatic === img.attr("data-static")) {
-                            isAfav = true;
-                        }
-                    });
-
-                    // if in favs array, show filled in heart
-                    if (isAfav) {
-                        var favIcon = $("<i>").addClass("fas fa-heart fav-icon opacity-0");
-                    } else {
-                        var favIcon = $("<i>").addClass("far fa-heart fav-icon opacity-0");
+                    // if this image's static url matches one in the favs array
+                    if (getStatic === img.attr("data-static")) {
+                        isAfav = true;
                     }
+                });
+
+                // if in favs array, show filled in heart
+                if (isAfav) {
+                    var favIcon = $("<i>").addClass("fas fa-heart fav-icon opacity-0");
+                } else {
+                    var favIcon = $("<i>").addClass("far fa-heart fav-icon opacity-0");
                 }
 
                 // add image to div
@@ -155,10 +153,9 @@ var app = {
 
     loadFavorites: function () {
         // on page load - load saved favorites
+        app.favsArray = JSON.parse(localStorage.getItem("favorites"));
 
         if (app.favsArray !== null) {
-            app.favsArray = JSON.parse(localStorage.getItem("favorites"));
-            
             for (var i = 0; i < app.favsArray.length; i++) {
                 var theImage = app.favsArray[i].image;
                 var theRating = app.favsArray[i].rating;
