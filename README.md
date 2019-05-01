@@ -4,4 +4,6 @@
 
 Save your favorites to look at later.
 
+[See it for yourself](https://jpauletti.github.io/Giphy/)
+
 ![Game Screenshot](assets/images/giphy-screenshot.png)
